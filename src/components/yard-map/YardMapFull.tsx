@@ -63,30 +63,30 @@ function SlotCell({
       onClick={() => onClick(slot)}
       className="cursor-pointer rounded transition-all duration-150 flex items-center justify-center flex-shrink-0"
       style={{
-        width: 28,
-        height: 20,
+        width: 11,
+        height: 8,
         backgroundColor: highlighted
           ? '#f97316'
           : slot.occupied
           ? colors.slotOcc
           : colors.slotFree,
         border: highlighted
-          ? '2px solid #fff'
+          ? '1.5px solid #fff'
           : `1px solid ${slot.occupied ? colors.border : '#00000015'}`,
         position: 'relative',
-        fontSize: 7,
+        fontSize: 4,
         fontWeight: 700,
         color: (highlighted || slot.occupied) ? '#fff' : colors.text,
         boxShadow: highlighted
-          ? '0 0 0 3px rgba(249,115,22,0.6), 0 0 12px rgba(249,115,22,0.5)'
+          ? '0 0 0 2px rgba(249,115,22,0.6)'
           : undefined,
-        transform: highlighted ? 'scale(1.25)' : 'scale(1)',
+        transform: highlighted ? 'scale(1.3)' : 'scale(1)',
         zIndex: highlighted ? 20 : 1,
-        borderRadius: highlighted ? 4 : 3,
+        borderRadius: 2,
       }}
       title={`${slot.code}${slot.vehicle ? ` — ${slot.vehicle.year} ${slot.vehicle.make} ${slot.vehicle.model}` : ' — Free'}`}
     >
-      {slot.occupied ? <Car style={{ width: 11, height: 11 }} /> : <span>{String(slot.code.split('-')[1])}</span>}
+      {slot.occupied ? <Car style={{ width: 5, height: 5 }} /> : <span>{String(slot.code.split('-')[1])}</span>}
     </div>
   );
 }
@@ -309,10 +309,9 @@ export function YardMapFull() {
         {/* Map canvas */}
         <div
           ref={mapRef}
-          className="bg-[#2d4a1e] rounded-3xl p-4 shadow-2xl overflow-auto"
-          style={{ maxHeight: 'calc(100vh - 280px)' }}
+          className="bg-[#2d4a1e] rounded-3xl p-4 shadow-2xl"
         >
-          <div style={{ minWidth: 820 }}>
+          <div>
 
             {/* ── TOP ROW: A + C + Building H ── */}
             <div className="flex gap-3 mb-3 items-start">
