@@ -43,7 +43,8 @@ export function getSlotStatusColor(status: SlotStatus): string {
   }
 }
 
-export function maskVin(vin: string): string {
+export function maskVin(vin: string | undefined): string {
+  if (!vin) return '';
   if (vin.length <= 8) return vin;
   return vin.substring(0, 8) + '*****';
 }

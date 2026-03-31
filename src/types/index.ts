@@ -4,12 +4,12 @@ export type SlotStatus = 'occupied' | 'free' | 'reserved';
 export interface Vehicle {
   id: string;
   lotNumber: string;
-  vin: string;
+  vin?: string;
   year: number;
   make: string;
   model: string;
   trim?: string;
-  color: string;
+  color?: string;
   sourceName?: string;
   sourceUrl?: string;
   slotCode: string;

@@ -6,9 +6,10 @@ const PASSWORD         = process.env.SITE_PASSWORD ?? 'upullit2024';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Allow the password gate itself and its assets
+  // Allow the password gate, API routes, and static assets
   if (
     pathname.startsWith('/enter') ||
+    pathname.startsWith('/api/') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon')
   ) {

@@ -115,12 +115,14 @@ export function SlotView({ slot }: SlotViewProps) {
 
                 {/* Details grid */}
                 <div className="grid grid-cols-2 gap-3 text-sm mb-4">
+                  {slot.currentVehicle.color && (
                   <div className="bg-slate-50 rounded-lg p-3">
                     <p className="text-slate-400 text-xs mb-0.5">Color</p>
                     <p className="font-semibold text-slate-800">
                       {slot.currentVehicle.color}
                     </p>
                   </div>
+                  )}
                   {slot.currentVehicle.mileage && (
                     <div className="bg-slate-50 rounded-lg p-3">
                       <p className="text-slate-400 text-xs mb-0.5">Mileage</p>

@@ -45,17 +45,12 @@ export default async function VehicleDetailPage({ params }: PageProps) {
   }
 
   const detailItems = [
-    {
-      icon: Hash,
-      label: 'VIN (Partial)',
-      value: maskVin(vehicle.vin),
-      mono: true,
-    },
-    {
-      icon: Palette,
-      label: 'Color',
-      value: vehicle.color,
-    },
+    ...(vehicle.vin
+      ? [{ icon: Hash, label: 'VIN (Partial)', value: maskVin(vehicle.vin), mono: true }]
+      : []),
+    ...(vehicle.color
+      ? [{ icon: Palette, label: 'Color', value: vehicle.color, mono: false }]
+      : []),
     ...(vehicle.mileage
       ? [
           {

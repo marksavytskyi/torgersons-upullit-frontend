@@ -20,7 +20,7 @@ export async function getVehicles(filters?: SearchFilters): Promise<Vehicle[]> {
         v.model.toLowerCase().includes(q) ||
         v.lotNumber.toLowerCase().includes(q) ||
         String(v.year).includes(q) ||
-        v.color.toLowerCase().includes(q) ||
+        (v.color && v.color.toLowerCase().includes(q)) ||
         (v.trim && v.trim.toLowerCase().includes(q))
     );
   }
