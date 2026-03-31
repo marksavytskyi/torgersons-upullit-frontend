@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { YardMapFull } from '@/components/yard-map/YardMapFull';
 
 export const metadata = {
@@ -21,7 +21,9 @@ export default function YardMapPage() {
       </div>
 
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <YardMapFull />
+        <Suspense fallback={null}>
+          <YardMapFull />
+        </Suspense>
       </div>
     </main>
   );

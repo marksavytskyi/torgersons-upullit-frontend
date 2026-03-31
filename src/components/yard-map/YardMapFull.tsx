@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MOCK_VEHICLES } from '@/data/mockData';
 import { Car, Building2, Info, MapPin, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import { formatUpdatedAt } from '@/lib/utils';
@@ -196,9 +196,23 @@ const PAGE_SIZE = 5;
 
 export function YardMapFull() {
   const router = useRouter();
-  const [highlightedCode, setHighlightedCode] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const [highlightedCode, setHighlightedCode] = useState<string | null>(
+    searchParams.get('slot')
+  );
   const [page, setPage] = useState(0);
   const mapRef = useRef<HTMLDivElement>(null);
+
+  // If opened with ?slot=X — scroll to it after mount
+  useEffect(() => {
+    const slot = searchParams.get('slot');
+    if (!slot) return;
+    setHighlightedCode(slot);
+    setTimeout(() => {
+      document.getElementById(`slot-${slot}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+    }, 300);
+  }, [searchParams]);
 
   // Build vehicle lookup map
   const vehicleMap = useMemo(() => {

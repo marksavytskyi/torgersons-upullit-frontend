@@ -238,7 +238,7 @@ export default async function VehicleDetailPage({ params }: PageProps) {
               {/* CTAs */}
               <div className="flex flex-col gap-2.5">
                 <Link
-                  href={`/slot/${encodeURIComponent(vehicle.slotCode)}`}
+                  href={`/yard-map?slot=${encodeURIComponent(vehicle.slotCode)}`}
                   className="flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-600 text-white font-semibold px-5 py-3.5 rounded-xl transition-colors shadow-sm text-sm"
                 >
                   <MapPin className="w-4 h-4" />
