@@ -10,12 +10,12 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'YardTrack — Smart Salvage Yard Inventory',
-    template: '%s | YardTrack',
+    default: "Torgerson's U-Pull-It — Salvage Yard Inventory",
+    template: "%s | Torgerson's U-Pull-It",
   },
   description:
-    'Find the exact part you need. Know the slot. Skip the guesswork. YardTrack is the smartest way to search a U-Pull-It auto salvage yard.',
-  keywords: ['u-pull-it', 'salvage yard', 'auto parts', 'junkyard', 'car parts'],
+    "Find the exact part you need. Browse photo-verified, slot-mapped inventory at Torgerson's U-Pull-It auto salvage yard.",
+  keywords: ['u-pull-it', 'salvage yard', 'auto parts', 'junkyard', 'car parts', 'Torgersons'],
 };
 
 export default function RootLayout({
