@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { MOCK_VEHICLES } from '@/data/mockData';
-import { Car, Building2, Info, MapPin, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
+import { Car, Building2, Info, MapPin, ChevronLeft, ChevronRight, Clock, Search, X } from 'lucide-react';
 import { formatUpdatedAt } from '@/lib/utils';
 import { Vehicle } from '@/types';
 
@@ -201,6 +201,8 @@ export function YardMapFull() {
     searchParams.get('slot')
   );
   const [page, setPage] = useState(0);
+  const [search, setSearch] = useState('');
+  const [slotFilter, setSlotFilter] = useState<'all' | 'occupied' | 'free'>('all');
   const mapRef = useRef<HTMLDivElement>(null);
 
   // If opened with ?slot=X — scroll to it after mount
@@ -243,8 +245,25 @@ export function YardMapFull() {
   const totalSlots = 450;
   const totalOcc   = Object.values(zones).flat().filter((s) => s.occupied).length;
 
-  // Paginated vehicle list
-  const vehicles = MOCK_VEHICLES;
+  // Filtered + paginated vehicle list
+  const vehicles = useMemo(() => {
+    const q = search.toLowerCase().trim();
+    return MOCK_VEHICLES.filter((v) => {
+      if (slotFilter === 'occupied' && v.status !== 'available') return false;
+      if (slotFilter === 'free') return false; // no free slots have vehicles
+      if (q) {
+        return (
+          v.make.toLowerCase().includes(q) ||
+          v.model.toLowerCase().includes(q) ||
+          String(v.year).includes(q) ||
+          v.lotNumber.toLowerCase().includes(q) ||
+          (v.slotCode && v.slotCode.toLowerCase().includes(q))
+        );
+      }
+      return true;
+    });
+  }, [search, slotFilter]);
+
   const totalPages = Math.ceil(vehicles.length / PAGE_SIZE);
   const pageVehicles = vehicles.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
@@ -421,7 +440,48 @@ export function YardMapFull() {
         {/* Panel header */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-card px-4 py-3">
           <p className="font-black text-slate-900 text-sm">Vehicles in Yard</p>
-          <p className="text-slate-400 text-xs mt-0.5">{vehicles.length} total · click to locate on map</p>
+          <p className="text-slate-400 text-xs mt-0.5">{vehicles.length} of {MOCK_VEHICLES.length} · click to locate on map</p>
+        </div>
+
+        {/* Search */}
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => { setSearch(e.target.value); setPage(0); }}
+            placeholder="Search make, model, slot…"
+            className="w-full bg-white border border-slate-200 rounded-xl pl-8 pr-8 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent shadow-sm"
+          />
+          {search && (
+            <button
+              onClick={() => { setSearch(''); setPage(0); }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+            >
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
+
+        {/* Slot filters */}
+        <div className="flex gap-1.5">
+          {(['all', 'occupied', 'free'] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => { setSlotFilter(f); setPage(0); }}
+              className={`flex-1 py-2 rounded-xl text-[10px] font-bold uppercase tracking-wide transition-colors border ${
+                slotFilter === f
+                  ? f === 'occupied'
+                    ? 'bg-orange-500 text-white border-orange-500'
+                    : f === 'free'
+                      ? 'bg-emerald-500 text-white border-emerald-500'
+                      : 'bg-slate-800 text-white border-slate-800'
+                  : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              {f === 'all' ? 'All' : f === 'occupied' ? 'Occupied' : 'Free'}
+            </button>
+          ))}
         </div>
 
         {/* Highlighted vehicle detail */}
@@ -457,7 +517,7 @@ export function YardMapFull() {
         {/* Scrollable list */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-card overflow-hidden">
           <div className="divide-y divide-slate-50 px-2 py-1">
-            {pageVehicles.map((v) => (
+            {pageVehicles.length > 0 ? pageVehicles.map((v) => (
               <div key={v.id} className="vehicle-list-card py-1">
                 <VehicleListCard
                   vehicle={v}
@@ -465,7 +525,9 @@ export function YardMapFull() {
                   onClick={() => handleVehicleClick(v)}
                 />
               </div>
-            ))}
+            )) : (
+              <p className="text-center text-slate-400 text-xs py-6">No vehicles found</p>
+            )}
           </div>
 
           {/* Pagination */}
