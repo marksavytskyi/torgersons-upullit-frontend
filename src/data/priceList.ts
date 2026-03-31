@@ -70,4 +70,4 @@ export const PRICE_LIST: PriceItem[] = [
   { category: 'DOORS', name: 'INTERIOR DOOR PANEL',               price: 34.99,  basis: 'Each', corePrice: 0,  returnable: true },
 ];
 
-export const CATEGORIES = [...new Set(PRICE_LIST.map(i => i.category))].sort();
+export const CATEGORIES = Array.from(new Set(PRICE_LIST.map(i => i.category))).sort();
